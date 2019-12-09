@@ -35,7 +35,7 @@ int main(){
             map<pii, bool> visited;
             map<pii, int> d;
             d[src] = 0;
-            visited[src] = false;
+            visited[src] = true;
             q.push(src);
             while(!q.empty()){
                 pii v = q.front();
