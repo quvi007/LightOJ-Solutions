@@ -43,7 +43,7 @@ int main(){
                 vector<pii> adj;
                 for(int i = 0; i < 4; ++i){
                     char ch = grid[v.ff + fx[i]][v.ss + fy[i]];
-                    if(ch != '#') adj.pb(mp(v.ff + fx[i], v.ss + fy[i]));
+                    if(ch != '#' && ch != 'm') adj.pb(mp(v.ff + fx[i], v.ss + fy[i]));
                 }
                 for(pii u : adj){
                     if(!visited[u]){
