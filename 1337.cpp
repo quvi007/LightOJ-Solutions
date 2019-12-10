@@ -7,26 +7,36 @@ typedef pair<int, int> pii;
 #define mp make_pair
 #define pb push_back
 
-map<pii, bool> visited;
 int fx[] = {-1, 1, 0, 0}, fy[] = {0, 0, -1, 1};
-int dp[502][502];
+int dp[502][502], visited[502][502];
 char grid[502][502], str[502];
-vector<pii> nodes;
 
-int dfs(pii v){
-    visited[v] = true;
-    vector<pii> adj;
-    nodes.pb(v);
-    for(int i = 0; i < 4; ++i){
-        char ch = grid[v.ff + fx[i]][v.ss + fy[i]];
-        if(ch != '#') adj.pb(mp(v.ff + fx[i], v.ss + fy[i]));
-    }
+void bfs(pii v){
+    queue<pii> q;
+    q.push(v);
+    visited[v.ff][v.ss] = 1;
+    vector<pii> nodes;
     int ans = 0;
-    for(pii u : adj)
-        if(!visited[u])
-            ans += dfs(u);
-    if(grid[v.ff][v.ss] == 'C') ans++;
-    return ans;
+    while(!q.empty()){
+        pii f = q.front();
+        nodes.pb(f);
+        q.pop();
+        if(grid[f.ff][f.ss] == 'C') ans++;
+        vector<pii> adj;
+        for(int i = 0; i < 4; ++i){
+            char ch = grid[f.ff + fx[i]][f.ss + fy[i]];
+            if(ch != '#') adj.pb(mp(f.ff + fx[i], f.ss + fy[i]));
+        }
+        for(pii u : adj){
+            if(!visited[u.ff][u.ss]){
+                visited[u.ff][u.ss] = 1;
+                q.push(u);
+            }
+        }
+    }
+    for(pii node : nodes){
+        dp[node.ff][node.ss] = ans;
+    }
 }
 
 int main(){
@@ -34,24 +44,21 @@ int main(){
     scanf("%d", &T);
     for(int tc = 1; tc <= T; ++tc){
         scanf("%d %d %d", &m, &n, &q);
-        memset(grid, '#', sizeof grid );
+        memset(grid, '#', sizeof grid);
         memset(dp, -1, sizeof dp);
-        visited.clear();
-        nodes.clear();
+        memset(visited, 0, sizeof visited);
+
         for(int i = 1; i <= m; ++i){
             scanf("%s", str);
             for(int j = 1; j <= n; ++j){
                 grid[i][j] = str[j - 1];
             }
         }
+
         for(int i = 1; i <= m; ++i){
             for(int j = 1; j <= n; ++j){
                 if(dp[i][j] == -1 && grid[i][j] != '#'){
-                    nodes.clear();
-                    int r = dfs({i, j});
-                    for(pii node : nodes){
-                        dp[node.ff][node.ss] = r;
-                    }
+                    bfs(mp(i, j));
                 }
             }
         }
