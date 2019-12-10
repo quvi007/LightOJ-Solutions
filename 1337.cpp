@@ -9,8 +9,8 @@ typedef pair<int, int> pii;
 
 map<pii, bool> visited;
 int fx[] = {-1, 1, 0, 0}, fy[] = {0, 0, -1, 1};
-int dp[502][1002];
-char grid[502][1002], str[1002];
+int dp[502][502];
+char grid[502][502], str[502];
 vector<pii> nodes;
 
 int dfs(pii v){
